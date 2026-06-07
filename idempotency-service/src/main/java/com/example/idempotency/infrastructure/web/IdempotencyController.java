@@ -15,6 +15,13 @@ public class IdempotencyController {
 
     private final IdempotencyService idempotencyService;
 
+    /**
+     * Endpoint to handle idempotent requests. Clients must include an "Idempotency-Key" header and a JSON payload.
+     * @param idempotencyKey string representing the idempotency key, must be unique for each distinct request
+     * @param payload JSON body of the request, will be hashed and stored to ensure idempotency
+     * @return a Mono emitting a ResponseEntity containing the result of the operation,
+     *         with appropriate status code and body based on the idempotency logic.
+     */
     @PostMapping("/execute")
     public Mono<ResponseEntity<Map<String, Object>>> execute(
             @RequestHeader(value = "Idempotency-Key", required = false) String idempotencyKey,
