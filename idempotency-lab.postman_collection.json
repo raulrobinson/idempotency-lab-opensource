@@ -1,0 +1,289 @@
+{
+  "info": {
+    "name": "Idempotency Lab - Spring WebFlux + Gateway + Lambda Node + MongoDB",
+    "_postman_id": "7a04f474-96c2-4a50-9d7e-idempotency-lab",
+    "description": "Colecci\u00f3n para probar el laboratorio de idempotencia con Spring Cloud Gateway, Spring WebFlux, Lambda Node.js simulada y MongoDB.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "gatewayUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "idempotencyUrl",
+      "value": "http://localhost:8081"
+    },
+    {
+      "key": "lambdaUrl",
+      "value": "http://localhost:3001"
+    },
+    {
+      "key": "idempotencyKey",
+      "value": "order-001"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - Lambda Node Domain - Direct Invoke",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"amount\": 100,\n  \"currency\": \"USD\",\n  \"customerId\": \"customer-001\"\n}"
+        },
+        "url": {
+          "raw": "{{lambdaUrl}}/invoke",
+          "host": [
+            "{{lambdaUrl}}"
+          ],
+          "path": [
+            "invoke"
+          ]
+        }
+      }
+    },
+    {
+      "name": "02 - Idempotency Service - First Request",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "{{idempotencyKey}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"amount\": 100,\n  \"currency\": \"USD\",\n  \"customerId\": \"customer-001\"\n}"
+        },
+        "url": {
+          "raw": "{{idempotencyUrl}}/idempotency/execute",
+          "host": [
+            "{{idempotencyUrl}}"
+          ],
+          "path": [
+            "idempotency",
+            "execute"
+          ]
+        }
+      }
+    },
+    {
+      "name": "03 - Idempotency Service - Same Key Same Payload",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "{{idempotencyKey}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"amount\": 100,\n  \"currency\": \"USD\",\n  \"customerId\": \"customer-001\"\n}"
+        },
+        "url": {
+          "raw": "{{idempotencyUrl}}/idempotency/execute",
+          "host": [
+            "{{idempotencyUrl}}"
+          ],
+          "path": [
+            "idempotency",
+            "execute"
+          ]
+        }
+      }
+    },
+    {
+      "name": "04 - Idempotency Service - Same Key Different Payload - 422",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "{{idempotencyKey}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"amount\": 999,\n  \"currency\": \"USD\",\n  \"customerId\": \"customer-001\"\n}"
+        },
+        "url": {
+          "raw": "{{idempotencyUrl}}/idempotency/execute",
+          "host": [
+            "{{idempotencyUrl}}"
+          ],
+          "path": [
+            "idempotency",
+            "execute"
+          ]
+        }
+      }
+    },
+    {
+      "name": "05 - Idempotency Service - Missing Idempotency-Key - 400",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"amount\": 100,\n  \"currency\": \"USD\"\n}"
+        },
+        "url": {
+          "raw": "{{idempotencyUrl}}/idempotency/execute",
+          "host": [
+            "{{idempotencyUrl}}"
+          ],
+          "path": [
+            "idempotency",
+            "execute"
+          ]
+        }
+      }
+    },
+    {
+      "name": "06 - Gateway - First Request",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "gateway-order-001"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"amount\": 150,\n  \"currency\": \"USD\",\n  \"customerId\": \"customer-002\"\n}"
+        },
+        "url": {
+          "raw": "{{gatewayUrl}}/api/execute",
+          "host": [
+            "{{gatewayUrl}}"
+          ],
+          "path": [
+            "api",
+            "execute"
+          ]
+        }
+      }
+    },
+    {
+      "name": "07 - Gateway - Same Key Same Payload",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "gateway-order-001"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"amount\": 150,\n  \"currency\": \"USD\",\n  \"customerId\": \"customer-002\"\n}"
+        },
+        "url": {
+          "raw": "{{gatewayUrl}}/api/execute",
+          "host": [
+            "{{gatewayUrl}}"
+          ],
+          "path": [
+            "api",
+            "execute"
+          ]
+        }
+      }
+    },
+    {
+      "name": "08 - Gateway - Same Key Different Payload - 422",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "gateway-order-001"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"amount\": 999,\n  \"currency\": \"USD\",\n  \"customerId\": \"customer-002\"\n}"
+        },
+        "url": {
+          "raw": "{{gatewayUrl}}/api/execute",
+          "host": [
+            "{{gatewayUrl}}"
+          ],
+          "path": [
+            "api",
+            "execute"
+          ]
+        }
+      }
+    },
+    {
+      "name": "09 - Gateway - Forced Domain Error",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "gateway-error-001"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"amount\": 200,\n  \"currency\": \"USD\",\n  \"forceError\": true\n}"
+        },
+        "url": {
+          "raw": "{{gatewayUrl}}/api/execute",
+          "host": [
+            "{{gatewayUrl}}"
+          ],
+          "path": [
+            "api",
+            "execute"
+          ]
+        }
+      }
+    }
+  ]
+}

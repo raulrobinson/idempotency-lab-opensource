@@ -1,0 +1,22 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: idempotency-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: idempotency_lab
+    volumes:
+      - mongodb_data:/data/db
+
+  lambda-node-domain:
+    build:
+      context: ./lambda-node-domain
+    container_name: lambda-node-domain
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+
+volumes:
+  mongodb_data:

@@ -1,0 +1,15 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: idempotency-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/idempotency_lab
+
+domain:
+  lambda-url: http://localhost:3001/invoke
+
+idempotency:
+  ttl-hours: 24
