@@ -1,6 +1,17 @@
 # Laboratorio Basico de Idempotencia
 
-### Introduccion:
+![Java](https://img.shields.io/badge/Java-21-orange?style=for-the-badge&logo=openjdk)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5-brightgreen?style=for-the-badge&logo=springboot)
+![Spring WebFlux](https://img.shields.io/badge/Spring%20WebFlux-Reactive-6DB33F?style=for-the-badge&logo=spring)
+![Spring Cloud Gateway](https://img.shields.io/badge/Spring%20Cloud-Gateway-6DB33F?style=for-the-badge&logo=spring)
+![Node.js](https://img.shields.io/badge/Node.js-22-339933?style=for-the-badge&logo=nodedotjs)
+![MongoDB](https://img.shields.io/badge/MongoDB-7-47A248?style=for-the-badge&logo=mongodb)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker)
+![Idempotency](https://img.shields.io/badge/Pattern-Idempotency-blueviolet?style=for-the-badge)
+![Reactive](https://img.shields.io/badge/Architecture-Reactive-blue?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
+
+### Introducción:
 Este laboratorio implementa un patrón de idempotencia independiente del dominio. 
 1. El cliente envía una petición HTTP con un Idempotency-Key; 
 2. API Gateway la enruta hacia un servicio WebFlux encargado de controlar si la operación debe ejecutarse, bloquearse o responderse desde una respuesta previamente almacenada.
@@ -212,3 +223,10 @@ flowchart TB
     POLICY -.errores controlados.-> DLQ_COLLECTION
 ```
 
+---
+
+### Licencia:
+Este proyecto está bajo la Licencia MIT. Consulta el archivo LICENSE para más detalles.
+
+### Autor:
+- [Raul R. Bolivar Navas](https://github.com/raulrobinson/idempotency-lab-opensource)
